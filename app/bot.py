@@ -96,7 +96,7 @@ async def spaces_cmd(message: Message):
         if not rows:
             await message.answer("Aucun espace enregistré. Utilise /register_space dans un groupe/une chaîne.")
             return
-        await message.answer("Tes espaces :\n" + "\n".join(f"• {s.title} — {s.kind} — ID `{s.chat_id}`" for s in rows), parse_mode="Markdown")
+        await message.answer("Tes espaces :\n" + "\n".join(f"• {s.title} — {s.kind} — ID {s.chat_id}" for s in rows), parse_mode=None)
 
 @dp.message(Command("stats"))
 async def stats_cmd(message: Message):
@@ -124,11 +124,11 @@ async def profile_cmd(message: Message):
         member = await upsert_member(session, space, user)
         await session.commit()
         await message.answer(
-            f"Profil dans cet espace\nID : `{member.telegram_id}`\n"
+            f"Profil dans cet espace\nID : {member.telegram_id}\n"
             f"Nom : {member.first_name} {member.last_name}\n"
             f"Pseudo : @{member.username or 'aucun'}\n"
             f"Avertissements : {member.warnings}\nMessages suivis : {member.message_count}",
-            parse_mode="None"
+            parse_mode=None
         )
 
 @dp.message(Command("warn"))
