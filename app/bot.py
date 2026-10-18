@@ -128,7 +128,7 @@ async def profile_cmd(message: Message):
             f"Nom : {member.first_name} {member.last_name}\n"
             f"Pseudo : @{member.username or 'aucun'}\n"
             f"Avertissements : {member.warnings}\nMessages suivis : {member.message_count}",
-            parse_mode="Markdown"
+            parse_mode="None"
         )
 
 @dp.message(Command("warn"))
