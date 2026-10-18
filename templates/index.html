@@ -3,26 +3,424 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Community Suite · Telegram</title>
+<title>Community Suite · Tableau de bord</title>
 <style>
-:root{color-scheme:dark;--bg:#0b0b10;--panel:#15151e;--line:#292936;--muted:#a5a5b7;--text:#f4f2f8;--accent:#c4a7ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#27203c 0,transparent 35%),var(--bg);color:var(--text);font:15px Inter,ui-sans-serif,system-ui,sans-serif}
-main{max-width:1120px;margin:auto;padding:36px 22px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:15px;background:linear-gradient(135deg,#d9c6ff,#8b5cf6);display:grid;place-items:center;color:#171020;font-weight:900;font-size:20px}
-h1{font-size:clamp(26px,4vw,38px);margin:0;letter-spacing:-1.4px}.sub{color:var(--muted);margin-top:7px}.pill{border:1px solid var(--line);background:#171721;border-radius:999px;padding:9px 13px;color:#d9d4e6}
-.hero{margin:32px 0 20px;padding:26px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(120deg,#1b1927,#12121a);display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
-.hero p{max-width:600px;color:var(--muted);line-height:1.65}.hero strong{color:var(--text)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{border:1px solid var(--line);background:rgba(21,21,30,.92);padding:20px;border-radius:20px}.card h2{font-size:15px;color:#d9c8ff;margin:0 0 12px}.big{font-size:30px;font-weight:750;letter-spacing:-1px}.muted{color:var(--muted);line-height:1.6}.section{margin-top:24px}.section h2{font-size:18px}.code{font:13px ui-monospace,monospace;background:#0a0a0f;padding:12px;border-radius:12px;overflow-wrap:anywhere;color:#d7c5ff}
-a{color:#d9c8ff}footer{color:var(--muted);font-size:12px;margin:26px 0 8px}
+:root{color-scheme:dark;--bg:#0b0b10;--panel:#15151e;--line:#292936;--muted:#a5a5b7;--text:#f4f2f8;--accent:#c4a7ff;--accent2:#8b5cf6;--ok:#6ee7a8;--warn:#fbbf24;--bad:#fb7185;--info:#7dd3fc}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 80% 0,#27203c 0,transparent 35%),var(--bg);color:var(--text);font:15px Inter,ui-sans-serif,system-ui,sans-serif;min-height:100vh}
+main{max-width:1180px;margin:auto;padding:30px 20px 40px}
+[hidden]{display:none!important}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:15px;background:linear-gradient(135deg,#d9c6ff,#8b5cf6);display:grid;place-items:center;color:#171020;font-weight:900;font-size:20px}
+h1{font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:-1.2px}
+.sub{color:var(--muted);margin-top:5px;font-size:14px}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:#171721;border-radius:999px;padding:8px 13px;color:#d9d4e6;font-size:13px}
+.pill.ok{color:var(--ok)}.pill.bad{color:var(--bad)}
+button,select,input{font:inherit;color:var(--text)}
+button{cursor:pointer;border:1px solid var(--line);background:#1d1d29;border-radius:12px;padding:9px 14px}
+button:hover{border-color:var(--accent)}
+button.primary{background:linear-gradient(135deg,#a78bfa,#7c3aed);border:0;font-weight:650;color:#fff}
+button:disabled{opacity:.6;cursor:wait}
+select,input[type=text],input[type=password]{background:#0f0f16;border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+select{width:auto}
+input:focus,select:focus{outline:2px solid #6d4fc2;outline-offset:1px}
+.card{border:1px solid var(--line);background:rgba(21,21,30,.92);padding:20px;border-radius:20px}
+.card h2{font-size:15px;color:#d9c8ff;margin:0 0 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.card h2 small{color:var(--muted);font-weight:400;font-size:12px}
+.muted{color:var(--muted);line-height:1.6}
+.login{max-width:520px;margin:40px auto}
+.login label{display:block;margin:14px 0 6px;color:#d9d4e6;font-size:13px}
+.login .row{margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.err{margin-top:14px;padding:11px 13px;border-radius:12px;background:#2a1520;border:1px solid #5b2234;color:#fecdd3;font-size:14px;line-height:1.5}
+.hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
+.toolbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.toolbar label{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px}
+.toolbar .grow{flex:1}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:16px}
+.kpi .lab{color:var(--muted);font-size:13px}
+.kpi .val{font-size:32px;font-weight:760;letter-spacing:-1px;margin-top:6px}
+.kpi .note{color:var(--muted);font-size:12px;margin-top:2px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:16px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:170px;padding-top:8px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;min-width:0}
+.stack{flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.seg{width:100%;border-radius:5px 5px 2px 2px;min-height:0}
+.seg.msg{background:linear-gradient(180deg,#b79bff,#7c3aed)}
+.seg.oth{background:var(--warn)}
+.col .d{font-size:10px;color:var(--muted);white-space:nowrap}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--muted)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px}
+.hbar{display:grid;grid-template-columns:150px 1fr 44px;gap:10px;align-items:center;margin:9px 0;font-size:13px}
+.hbar .t{background:#0f0f16;border-radius:999px;height:10px;overflow:hidden}
+.hbar .t i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#a78bfa,#7c3aed)}
+.hbar .n{text-align:right;color:var(--muted)}
+.hbar .l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{color:var(--muted);padding:18px 0;text-align:center;font-size:14px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #1d1d29;vertical-align:top}
+tr:hover td{background:#191924}
+td.num,th.num{text-align:right}
+.mono{font:12px ui-monospace,monospace;color:#c9bfe6}
+.badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--line);background:#171721;white-space:nowrap}
+.b-ok{color:var(--ok);border-color:#1f5a3f}.b-warn{color:var(--warn);border-color:#6b5415}.b-bad{color:var(--bad);border-color:#6b2435}.b-info{color:var(--info);border-color:#1e4a63}.b-mut{color:var(--muted)}
+.sp{margin-bottom:16px}
+.foot{color:var(--muted);font-size:12px;margin-top:22px}
+@media(max-width:560px){.hbar{grid-template-columns:110px 1fr 36px}.kpi .val{font-size:26px}}
 </style>
 </head>
 <body><main>
-<div class="top"><div class="brand"><div class="logo">C</div><div><h1>Community Suite</h1><div class="sub">Centre de contrôle Telegram · Multi-propriétaires</div></div></div><div class="pill">● Base prête à configurer</div></div>
-<section class="hero"><div><h2 style="font-size:22px;margin:0">Une communauté. Un centre de contrôle.</h2><p>Gère tes groupes et chaînes, retrouve les profils connus par leur identifiant Telegram, consulte les statistiques et garde une trace des actions de modération.</p><strong>API REST intégrée</strong><div class="sub">Les données de chaque propriétaire sont isolées par contrôle d'accès.</div></div><div class="pill">Python · FastAPI · PostgreSQL</div></section>
-<div class="grid">
-<div class="card"><h2>Espaces</h2><div class="big">Multi-espace</div><div class="muted">Groupes et chaînes rattachés à chaque propriétaire.</div></div>
-<div class="card"><h2>Identité</h2><div class="big">Telegram ID</div><div class="muted">Identifiant stable, nom et pseudo actualisés quand le bot voit le membre.</div></div>
-<div class="card"><h2>Modération</h2><div class="big">Journalisée</div><div class="muted">Avertissements, bannissements et événements disponibles via l'API.</div></div>
+
+<div class="top">
+  <div class="brand"><div class="logo">C</div><div><h1>Community Suite</h1><div class="sub" id="who">Centre de contrôle Telegram</div></div></div>
+  <div class="actions">
+    <span class="pill" id="status">● Non connecté</span>
+    <button id="btnRefresh" hidden>↻ Actualiser</button>
+    <button id="btnLogout" hidden>Déconnexion</button>
+  </div>
 </div>
-<section class="section card"><h2>Connecter le tableau de bord</h2><p class="muted">Cette première version expose une API protégée par jeton. L'interface n'enregistre aucun jeton dans le navigateur. Pour les appels API, utilise un client comme curl/Postman et les en-têtes ci-dessous.</p><div class="code">X-Admin-Token: TON_WEB_ADMIN_TOKEN<br>X-Telegram-Owner-Id: TON_IDENTIFIANT_TELEGRAM</div><p class="muted">Routes : <a href="/docs">documentation interactive de l'API</a> · <a href="/health">état du service</a></p></section>
-<footer>Prototype de base · Avant toute exposition publique, configure HTTPS et une authentification web robuste.</footer>
-</main></body></html>
+
+<section class="card login" id="login">
+  <h2>Connexion</h2>
+  <p class="muted" style="margin:0">Saisis ton jeton d'administration et ton identifiant Telegram de propriétaire (celui du compte qui a envoyé <b>/start</b> au bot).</p>
+  <form id="form" autocomplete="off">
+    <label for="token">Jeton d'administration (WEB_ADMIN_TOKEN)</label>
+    <input id="token" type="password" required>
+    <label for="owner">Identifiant Telegram du propriétaire</label>
+    <input id="owner" type="text" inputmode="numeric" pattern="[0-9]+" required>
+    <div class="row"><button class="primary" id="btnLogin" type="submit">Se connecter</button></div>
+    <div class="err" id="loginErr" hidden></div>
+  </form>
+  <div class="hint">Ces informations restent uniquement dans cet onglet (effacées à sa fermeture) et ne sont envoyées qu'à ton propre serveur.</div>
+</section>
+
+<div id="app" hidden>
+  <div class="toolbar">
+    <label>Espace
+      <select id="space"></select>
+    </label>
+    <label><input type="checkbox" id="auto"> Actualisation auto (30 s)</label>
+    <span class="grow"></span>
+    <span class="sub" id="updated"></span>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid3">
+    <section class="card"><h2>Activité · 14 jours <small>sur les 500 derniers événements</small></h2>
+      <div class="chart" id="chart"></div>
+      <div class="legend"><span><i class="dot" style="background:#8b5cf6"></i>Messages</span><span><i class="dot" style="background:var(--warn)"></i>Autres événements</span></div>
+    </section>
+    <section class="card"><h2>Événements par type</h2><div id="types"></div></section>
+    <section class="card"><h2>Membres par statut</h2><div id="statuses"></div></section>
+  </div>
+
+  <section class="card sp">
+    <h2>Membres <small id="memCount"></small></h2>
+    <div class="toolbar">
+      <input type="text" id="q" placeholder="Rechercher un nom, un @pseudo ou un ID" style="max-width:340px">
+      <label>Tri
+        <select id="sort">
+          <option value="msg">Plus de messages</option>
+          <option value="warn">Plus d'avertissements</option>
+          <option value="seen">Activité récente</option>
+        </select>
+      </label>
+    </div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Membre</th><th>ID</th><th>Statut</th><th class="num">Avert.</th><th class="num">Messages</th><th>Dernière activité</th><th>Espace</th></tr></thead>
+      <tbody id="members"></tbody>
+    </table></div>
+  </section>
+
+  <section class="card sp">
+    <h2>Journal des événements <small id="evCount"></small></h2>
+    <div class="toolbar">
+      <label>Afficher
+        <select id="evFilter">
+          <option value="main">Modération et membres</option>
+          <option value="all">Tout</option>
+          <option value="warning">Avertissements</option>
+          <option value="ban">Bannissements</option>
+          <option value="message_seen">Messages</option>
+        </select>
+      </label>
+    </div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Type</th><th>Auteur</th><th>Cible</th><th>Détails</th><th>Espace</th></tr></thead>
+      <tbody id="events"></tbody>
+    </table></div>
+  </section>
+</div>
+
+<div class="foot">Prototype · Pour une exposition publique, configure HTTPS et une authentification robuste.</div>
+</main>
+
+<script>
+(function(){
+"use strict";
+var $ = function(s){ return document.querySelector(s); };
+var esc = function(v){
+  return String(v == null ? "" : v).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+};
+var TYPE_LABEL = {message_seen:"Messages", warning:"Avertissements", ban:"Bannissements", unban:"Débannissements", chat_member_update:"Changements de membres", space_registered:"Espaces enregistrés"};
+var TYPE_CLASS = {message_seen:"b-mut", warning:"b-warn", ban:"b-bad", unban:"b-ok", chat_member_update:"b-info", space_registered:"b-ok"};
+var STATUS_LABEL = {member:"Membre", administrator:"Administrateur", creator:"Créateur", left:"Parti", kicked:"Banni", restricted:"Restreint"};
+var STATUS_CLASS = {member:"b-mut", administrator:"b-info", creator:"b-info", left:"b-warn", kicked:"b-bad", restricted:"b-warn"};
+
+var creds = null, data = null, timer = null, busy = false;
+
+function typeLabel(t){ return TYPE_LABEL[t] || t; }
+function fmtNum(n){ return Number(n || 0).toLocaleString("fr-FR"); }
+function when(iso){ var d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("fr-FR", {dateStyle:"short", timeStyle:"short"}); }
+function ago(iso){
+  var d = new Date(iso); if (isNaN(d)) return "";
+  var s = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
+  if (s < 60) return "à l'instant";
+  if (s < 3600) return "il y a " + Math.floor(s/60) + " min";
+  if (s < 86400) return "il y a " + Math.floor(s/3600) + " h";
+  return "il y a " + Math.floor(s/86400) + " j";
+}
+function memberName(m){
+  var n = ((m.first_name || "") + " " + (m.last_name || "")).trim();
+  return n || (m.username ? "@" + m.username : "Sans nom");
+}
+
+function api(path){
+  return fetch(path, {headers: {"X-Admin-Token": creds.token, "X-Telegram-Owner-Id": creds.owner}}).then(function(r){
+    if (r.ok) return r.json();
+    return r.json().catch(function(){ return {}; }).then(function(b){
+      var e = new Error(typeof b.detail === "string" ? b.detail : "Erreur " + r.status);
+      e.status = r.status; throw e;
+    });
+  });
+}
+
+function explain(e){
+  if (e.status === 401) return "Jeton d'administration invalide. Vérifie la valeur de WEB_ADMIN_TOKEN dans Railway.";
+  if (e.status === 404) return "Propriétaire inconnu. Envoie /start au bot depuis le compte Telegram dont tu as saisi l'identifiant.";
+  if (e.status === 503) return "WEB_ADMIN_TOKEN n'est pas configuré sur le serveur.";
+  if (e.status === 400) return "Identifiant Telegram manquant ou invalide.";
+  if (e.name === "TypeError") return "Impossible de joindre le serveur ou valeur d'en-tête invalide (caractères spéciaux).";
+  return e.message || "Erreur inconnue.";
+}
+
+function setStatus(text, cls){ var s = $("#status"); s.textContent = text; s.className = "pill " + (cls || ""); }
+
+function load(){
+  return api("/api/me").then(function(me){
+    return Promise.all([api("/api/stats"), api("/api/spaces"), api("/api/events?limit=500")]).then(function(r){
+      var stats = r[0], spaces = r[1], events = r[2];
+      return Promise.all(spaces.map(function(s){
+        return api("/api/members?space_id=" + s.id + "&limit=500");
+      })).then(function(lists){
+        var members = [];
+        spaces.forEach(function(s, i){
+          lists[i].forEach(function(m){ m.space_id = s.id; members.push(m); });
+        });
+        data = {me: me, stats: stats, spaces: spaces, events: events, members: members, at: new Date()};
+      });
+    });
+  });
+}
+
+function spaceTitle(id){
+  if (!data) return "";
+  for (var i = 0; i < data.spaces.length; i++) if (data.spaces[i].id === id) return data.spaces[i].title || String(data.spaces[i].chat_id);
+  return "";
+}
+
+function selected(){ var v = $("#space").value; return v === "all" ? null : Number(v); }
+
+function fillSpaces(){
+  var sel = $("#space"), cur = sel.value || "all";
+  var html = '<option value="all">Tous les espaces (' + data.spaces.length + ')</option>';
+  data.spaces.forEach(function(s){
+    html += '<option value="' + esc(s.id) + '">' + esc(s.title || s.chat_id) + '</option>';
+  });
+  sel.innerHTML = html;
+  sel.value = Array.prototype.some.call(sel.options, function(o){ return o.value === cur; }) ? cur : "all";
+}
+
+function render(){
+  var sid = selected();
+  var members = data.members.filter(function(m){ return sid === null || m.space_id === sid; });
+  var events = data.events.filter(function(e){ return sid === null || e.space_id === sid; });
+
+  var msgs = 0, warns = 0, banned = 0;
+  members.forEach(function(m){ msgs += m.message_count || 0; warns += m.warnings || 0; if (m.status === "kicked") banned++; });
+
+  $("#who").textContent = "Connecté en tant que " + (data.me.display_name || data.me.telegram_id);
+  var kp = [
+    ["Espaces", sid === null ? data.stats.spaces : 1, "groupes et chaînes"],
+    ["Membres", members.length, "profils connus du bot"],
+    ["Messages suivis", msgs, "depuis l'enregistrement"],
+    ["Avertissements", warns, "cumulés"],
+    ["Bannis", banned, "statut Telegram"],
+    ["Événements", sid === null ? data.stats.events : events.length, sid === null ? "au total" : "dans les 500 derniers"]
+  ];
+  $("#kpis").innerHTML = kp.map(function(k){
+    return '<div class="card kpi"><div class="lab">' + esc(k[0]) + '</div><div class="val">' + fmtNum(k[1]) + '</div><div class="note">' + esc(k[2]) + '</div></div>';
+  }).join("");
+
+  renderChart(events);
+  renderTypes(events);
+  renderStatuses(members);
+  renderMembers(members, sid === null);
+  renderEvents(events, sid === null);
+  $("#updated").textContent = "Mis à jour à " + data.at.toLocaleTimeString("fr-FR");
+}
+
+function dayKey(d){ return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
+
+function renderChart(events){
+  var days = [], i;
+  for (i = 13; i >= 0; i--){ var d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - i); days.push({key: dayKey(d), label: d.getDate() + "/" + (d.getMonth() + 1), msg: 0, oth: 0}); }
+  var idx = {}; days.forEach(function(x, n){ idx[x.key] = n; });
+  var total = 0;
+  events.forEach(function(e){
+    var d = new Date(e.created_at); if (isNaN(d)) return;
+    var n = idx[dayKey(d)]; if (n === undefined) return;
+    total++;
+    if (e.type === "message_seen") days[n].msg++; else days[n].oth++;
+  });
+  if (!total){ $("#chart").innerHTML = '<div class="empty" style="width:100%">Aucune activité sur cette période.</div>'; return; }
+  var max = 1; days.forEach(function(x){ max = Math.max(max, x.msg + x.oth); });
+  $("#chart").innerHTML = days.map(function(x){
+    var hm = Math.round(x.msg / max * 100), ho = Math.round(x.oth / max * 100);
+    return '<div class="col" title="' + esc(x.label + " : " + x.msg + " messages, " + x.oth + " autres") + '"><div class="stack">' +
+      '<div class="seg oth" style="height:' + ho + '%"></div><div class="seg msg" style="height:' + hm + '%"></div></div><div class="d">' + esc(x.label) + '</div></div>';
+  }).join("");
+}
+
+function bars(el, pairs, empty){
+  if (!pairs.length){ el.innerHTML = '<div class="empty">' + esc(empty) + '</div>'; return; }
+  var max = 1; pairs.forEach(function(p){ max = Math.max(max, p[1]); });
+  el.innerHTML = pairs.map(function(p){
+    return '<div class="hbar"><div class="l" title="' + esc(p[0]) + '">' + esc(p[0]) + '</div><div class="t"><i style="width:' + Math.round(p[1] / max * 100) + '%"></i></div><div class="n">' + fmtNum(p[1]) + '</div></div>';
+  }).join("");
+}
+
+function count(list, fn){
+  var c = {}; list.forEach(function(x){ var k = fn(x); c[k] = (c[k] || 0) + 1; });
+  return Object.keys(c).map(function(k){ return [k, c[k]]; }).sort(function(a, b){ return b[1] - a[1]; });
+}
+
+function renderTypes(events){
+  bars($("#types"), count(events, function(e){ return e.type; }).map(function(p){ return [typeLabel(p[0]), p[1]]; }), "Aucun événement pour l'instant.");
+}
+function renderStatuses(members){
+  bars($("#statuses"), count(members, function(m){ return m.status; }).map(function(p){ return [STATUS_LABEL[p[0]] || p[0], p[1]]; }), "Aucun membre enregistré.");
+}
+
+function renderMembers(members, showSpace){
+  var q = $("#q").value.trim().toLowerCase().replace(/^@/, "");
+  var list = members.filter(function(m){
+    if (!q) return true;
+    return memberName(m).toLowerCase().indexOf(q) >= 0 || String(m.username || "").toLowerCase().indexOf(q) >= 0 || String(m.telegram_id).indexOf(q) >= 0;
+  });
+  var s = $("#sort").value;
+  list.sort(function(a, b){
+    if (s === "warn") return (b.warnings || 0) - (a.warnings || 0);
+    if (s === "seen") return new Date(b.last_seen_at) - new Date(a.last_seen_at);
+    return (b.message_count || 0) - (a.message_count || 0);
+  });
+  $("#memCount").textContent = list.length + " résultat" + (list.length > 1 ? "s" : "") + (list.length > 200 ? " · 200 affichés" : "");
+  if (!list.length){ $("#members").innerHTML = '<tr><td colspan="7" class="empty">Aucun membre. Ajoute le bot à un groupe, tape /register_space dedans, puis laisse les membres écrire.</td></tr>'; return; }
+  $("#members").innerHTML = list.slice(0, 200).map(function(m){
+    return '<tr><td><b>' + esc(memberName(m)) + '</b>' + (m.username ? '<div class="sub">@' + esc(m.username) + '</div>' : '') + '</td>' +
+      '<td class="mono">' + esc(m.telegram_id) + '</td>' +
+      '<td><span class="badge ' + (STATUS_CLASS[m.status] || "b-mut") + '">' + esc(STATUS_LABEL[m.status] || m.status) + '</span></td>' +
+      '<td class="num">' + fmtNum(m.warnings) + '</td><td class="num">' + fmtNum(m.message_count) + '</td>' +
+      '<td title="' + esc(when(m.last_seen_at)) + '">' + esc(ago(m.last_seen_at)) + '</td>' +
+      '<td>' + esc(spaceTitle(m.space_id)) + '</td></tr>';
+  }).join("");
+}
+
+function renderEvents(events, showSpace){
+  var f = $("#evFilter").value;
+  var list = events.filter(function(e){
+    if (f === "all") return true;
+    if (f === "main") return e.type !== "message_seen";
+    return e.type === f;
+  });
+  $("#evCount").textContent = list.length + " événement" + (list.length > 1 ? "s" : "") + (list.length > 100 ? " · 100 affichés" : "");
+  if (!list.length){ $("#events").innerHTML = '<tr><td colspan="6" class="empty">Aucun événement pour ce filtre.</td></tr>'; return; }
+  $("#events").innerHTML = list.slice(0, 100).map(function(e){
+    return '<tr><td style="white-space:nowrap">' + esc(when(e.created_at)) + '</td>' +
+      '<td><span class="badge ' + (TYPE_CLASS[e.type] || "b-mut") + '">' + esc(typeLabel(e.type)) + '</span></td>' +
+      '<td class="mono">' + esc(e.actor == null ? "—" : e.actor) + '</td>' +
+      '<td class="mono">' + esc(e.target == null ? "—" : e.target) + '</td>' +
+      '<td>' + esc(e.details || "") + '</td><td>' + esc(spaceTitle(e.space_id)) + '</td></tr>';
+  }).join("");
+}
+
+function showApp(on){
+  $("#login").hidden = on; $("#app").hidden = !on;
+  $("#btnRefresh").hidden = !on; $("#btnLogout").hidden = !on;
+}
+
+function refresh(){
+  if (busy || !creds) return Promise.resolve();
+  busy = true; $("#btnRefresh").disabled = true;
+  return load().then(function(){
+    fillSpaces(); render(); setStatus("● Connecté", "ok");
+  }).catch(function(e){
+    if (e.status === 401 || e.status === 404 || e.status === 503 || e.status === 400){ logout(explain(e)); }
+    else { setStatus("● Erreur de chargement", "bad"); $("#updated").textContent = explain(e); }
+  }).then(function(){ busy = false; $("#btnRefresh").disabled = false; });
+}
+
+function login(ev){
+  ev.preventDefault();
+  creds = {token: $("#token").value.trim(), owner: $("#owner").value.trim()};
+  $("#loginErr").hidden = true; $("#btnLogin").disabled = true;
+  busy = false;
+  load().then(function(){
+    try { sessionStorage.setItem("cs_creds", JSON.stringify(creds)); } catch (e) {}
+    showApp(true); fillSpaces(); render(); setStatus("● Connecté", "ok"); schedule();
+  }).catch(function(e){
+    creds = null;
+    var b = $("#loginErr"); b.textContent = explain(e); b.hidden = false;
+  }).then(function(){ $("#btnLogin").disabled = false; });
+}
+
+function logout(msg){
+  creds = null; data = null; clearInterval(timer); timer = null;
+  try { sessionStorage.removeItem("cs_creds"); } catch (e) {}
+  $("#token").value = ""; $("#auto").checked = false;
+  showApp(false); setStatus("● Non connecté", ""); $("#who").textContent = "Centre de contrôle Telegram";
+  var b = $("#loginErr"); if (msg && typeof msg === "string"){ b.textContent = msg; b.hidden = false; } else { b.hidden = true; }
+}
+
+function schedule(){
+  clearInterval(timer); timer = null;
+  if ($("#auto").checked) timer = setInterval(refresh, 30000);
+}
+
+$("#form").addEventListener("submit", login);
+$("#btnRefresh").addEventListener("click", refresh);
+$("#btnLogout").addEventListener("click", function(){ logout(); });
+$("#auto").addEventListener("change", schedule);
+$("#space").addEventListener("change", function(){ if (data) render(); });
+$("#q").addEventListener("input", function(){ if (data) render(); });
+$("#sort").addEventListener("change", function(){ if (data) render(); });
+$("#evFilter").addEventListener("change", function(){ if (data) render(); });
+
+try {
+  var saved = JSON.parse(sessionStorage.getItem("cs_creds") || "null");
+  if (saved && saved.token && saved.owner){
+    creds = saved; $("#owner").value = saved.owner;
+    load().then(function(){ showApp(true); fillSpaces(); render(); setStatus("● Connecté", "ok"); })
+      .catch(function(){ creds = null; try { sessionStorage.removeItem("cs_creds"); } catch (e) {} });
+  }
+} catch (e) {}
+})();
+</script>
+</body>
+</html>
